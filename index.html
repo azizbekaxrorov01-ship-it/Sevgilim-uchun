@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Multfilm</title>
+<style>
+body{
+margin:0;
+background:#87ceeb;
+overflow:hidden;
+}
+canvas{
+display:block;
+}
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<script>
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let girlX = -100;
+let boyX = canvas.width/2 + 100;
+let flowerTaken = false;
+
+function drawGround(){
+ctx.fillStyle="#7cfc00";
+ctx.fillRect(0, canvas.height-120, canvas.width, 120);
+}
+
+function drawBoy(){
+ctx.fillStyle="#000";
+ctx.beginPath();
+ctx.arc(boyX, canvas.height-200, 20, 0, Math.PI*2);
+ctx.fill();
+
+ctx.fillRect(boyX-5, canvas.height-180, 10, 60);
+
+// flower
+if(!flowerTaken){
+ctx.fillStyle="green";
+ctx.fillRect(boyX+15, canvas.height-170, 5, 30);
+ctx.fillStyle="red";
+ctx.beginPath();
+ctx.arc(boyX+18, canvas.height-175, 8, 0, Math.PI*2);
+ctx.fill();
+}
+}
+
+function drawGirl(){
+ctx.fillStyle="#ff69b4";
+ctx.beginPath();
+ctx.arc(girlX, canvas.height-200, 20, 0, Math.PI*2);
+ctx.fill();
+
+ctx.fillRect(girlX-5, canvas.height-180, 10, 60);
+
+// smile after flower
+if(flowerTaken){
+ctx.fillStyle="red";
+ctx.font="30px Arial";
+ctx.fillText("😊", girlX-15, canvas.height-220);
+}
+}
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+// sky
+ctx.fillStyle="#87ceeb";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+// sun
+ctx.fillStyle="yellow";
+ctx.beginPath();
+ctx.arc(100,100,40,0,Math.PI*2);
+ctx.fill();
+
+drawGround();
+drawBoy();
+drawGirl();
+
+// girl walking
+if(girlX < boyX-40){
+girlX += 2;
+}else{
+flowerTaken = true;
+}
+
+requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+
+</body>
+</html>
