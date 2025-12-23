@@ -2,97 +2,53 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<title>Multfilm</title>
+<title>Realistic Cartoon Scene</title>
 <style>
-body{
-margin:0;
-background:#87ceeb;
-overflow:hidden;
+body {
+  margin:0;
+  overflow:hidden;
+  background: linear-gradient(to top, #87ceeb, #ffffff);
 }
-canvas{
-display:block;
+#scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+.character {
+  position: absolute;
+  bottom: 50px;
+  transition: all 1s linear;
 }
 </style>
 </head>
 <body>
 
-<canvas id="c"></canvas>
+<div id="scene">
+  <img id="boy" class="character" src="https://i.ibb.co/4pN2YvD/boy.png" style="left:60%;">
+  <img id="girl" class="character" src="https://i.ibb.co/qy4V2fH/girl.png" style="left:-20%;">
+  <img id="flower" class="character" src="https://i.ibb.co/J2x6qZK/flower.png" style="left:62%; bottom:120px; width:30px;">
+</div>
 
 <script>
-const canvas = document.getElementById("c");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let girlX = -100;
-let boyX = canvas.width/2 + 100;
-let flowerTaken = false;
-
-function drawGround(){
-ctx.fillStyle="#7cfc00";
-ctx.fillRect(0, canvas.height-120, canvas.width, 120);
-}
-
-function drawBoy(){
-ctx.fillStyle="#000";
-ctx.beginPath();
-ctx.arc(boyX, canvas.height-200, 20, 0, Math.PI*2);
-ctx.fill();
-
-ctx.fillRect(boyX-5, canvas.height-180, 10, 60);
-
-// flower
-if(!flowerTaken){
-ctx.fillStyle="green";
-ctx.fillRect(boyX+15, canvas.height-170, 5, 30);
-ctx.fillStyle="red";
-ctx.beginPath();
-ctx.arc(boyX+18, canvas.height-175, 8, 0, Math.PI*2);
-ctx.fill();
-}
-}
-
-function drawGirl(){
-ctx.fillStyle="#ff69b4";
-ctx.beginPath();
-ctx.arc(girlX, canvas.height-200, 20, 0, Math.PI*2);
-ctx.fill();
-
-ctx.fillRect(girlX-5, canvas.height-180, 10, 60);
-
-// smile after flower
-if(flowerTaken){
-ctx.fillStyle="red";
-ctx.font="30px Arial";
-ctx.fillText("😊", girlX-15, canvas.height-220);
-}
-}
+const girl = document.getElementById("girl");
+const flower = document.getElementById("flower");
+let girlPos = -20;
+let taken = false;
 
 function animate(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(!taken){
+    girlPos += 2;
+    girl.style.left = girlPos + "%";
 
-// sky
-ctx.fillStyle="#87ceeb";
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-// sun
-ctx.fillStyle="yellow";
-ctx.beginPath();
-ctx.arc(100,100,40,0,Math.PI*2);
-ctx.fill();
-
-drawGround();
-drawBoy();
-drawGirl();
-
-// girl walking
-if(girlX < boyX-40){
-girlX += 2;
-}else{
-flowerTaken = true;
-}
-
-requestAnimationFrame(animate);
+    if(girlPos >= 57){ // yaqinlashdi
+      taken = true;
+      flower.style.left = girlPos + 5 + "%"; // gul qizga o'tadi
+      setTimeout(()=>{ 
+        alert("Qiz gulni oldi va xursand!"); 
+      }, 500);
+    }
+  }
+  requestAnimationFrame(animate);
 }
 
 animate();
